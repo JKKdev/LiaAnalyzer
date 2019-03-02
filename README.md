@@ -5,6 +5,10 @@ Visualizing analyzer of GameState and custom variables
 
 A quick preview: https://streamable.com/k0yei
 
+Commands:
+- Left and Right Arrow to move one GameState forward/backward
+-S pace to pause/play 
+
 Setup instructions:
 - add "compile group: 'org.processing', name: 'core', version: '3.3.7'" to build.gradle dependencies
 - add cleanup function to Bot interface
@@ -27,6 +31,7 @@ public void cleanup() {
 }
 ```
 - add "public static Analyzer analyzer;" as a global variable in MyBot
+- add "analyzer.push("GameState", state);" to the top of MyBot update function
 
 Use case:
 - analyzer.push(VariableNameAsDisplayedInDebugger, Variable);
