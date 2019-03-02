@@ -26,12 +26,15 @@ public void cleanup() {
 	while(Thread.activeCount()>0);
 }
 ```
-- add "static Analyzer analyzer;" as a global variable in MyBot
+- add "public static Analyzer analyzer;" as a global variable in MyBot
 
 Use case:
 - analyzer.push(VariableNameAsDisplayedInDebugger, Variable);
 - analyzer.push("Comment", "Enemy base reached!");
 - analyzer.push("Unit" + unit.id + ": ", "Resource Spotted");
+
+Within MyBot package from any other class:
+- MyBot.analyzer.push("Unit" + unit.id + ": ", "Resource Spotted");
 	
 	If variable is parsable to text the value will be displayed in analyzer.
 
