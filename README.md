@@ -1,7 +1,7 @@
 # LiaAnalyzer
 Visualizing analyzer of GameState and custom variables
 
-![alt text](https://i.imgur.com/hqB02ew.png)
+![alt text](https://i.imgur.com/YYXXIaC.png)
 
 A quick preview: https://streamable.com/k0yei
 
