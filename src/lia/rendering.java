@@ -1,6 +1,10 @@
 package lia;
 import lia.api.GameState;
+import lia.api.OpponentInView;
+import lia.api.Point;
+import lia.api.ResourceInView;
 import lia.api.UnitData;
+import lia.api.UnitType;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -57,10 +61,26 @@ public class rendering extends PApplet{
 				}
 			}
 		}
-		fill(255,0,0);//switch to green
+		//switch to green
 		for(UnitData u:state.units) {
-			ellipse(pixelSize*u.x,pixelSize*u.y,pixelSize,pixelSize);//make an ellipse for our unit
+			fill(255,0,0);
+			ellipse(pixelSize*u.x,pixelSize*u.y,pixelSize*2,pixelSize*2);//make an ellipse for our unit
+			fill(0,0,0);
+			if(u.type == UnitType.WARRIOR)	text("Warr" + u.id,pixelSize*(u.x - 1), pixelSize*(u.y + 2));
+			else	text("Work" + u.id, pixelSize*(u.x - 1), pixelSize*(u.y + 2));
+			fill(0,0,255);
+			if(u.navigationPath.length > 0)
+			{
+				line(pixelSize*u.x, pixelSize*u.y, pixelSize*u.navigationPath[0].x, pixelSize*u.navigationPath[0].y);
+				for(int i = 0; i < u.navigationPath.length; i++)
+				{
+					ellipse(pixelSize*u.navigationPath[i].x,pixelSize*u.navigationPath[i].y,pixelSize,pixelSize);
+					if(i+1 < u.navigationPath.length)	line(pixelSize*u.navigationPath[i].x, pixelSize*u.navigationPath[i].y, pixelSize*u.navigationPath[i+1].x, pixelSize*u.navigationPath[i+1].y);
+				}
+			}
+			
 		}
+		fill(255,0,0);
 		text(txt,10,10);
 	}
 	
@@ -79,6 +99,24 @@ public class rendering extends PApplet{
 		state = (GameState)(analyzer.vars.get("GameState").get(0+offset));
 		time = Math.round(state.time*10);
 		txt = "Frame: " + time + "\n\r";
+		
+		for(UnitData u: state.units)
+		{
+			if(u.resourcesInView.length > 0)
+			{
+				for(ResourceInView r : u.resourcesInView)
+				{
+					txt += "ID" + u.id + " has resource in view at " + r.x + ":" + r.y + "\r\n";
+				}				
+			}
+			if(u.opponentsInView.length > 0)
+			{
+				for(OpponentInView o : u.opponentsInView)
+				{
+					txt += "ID" + u.id + " has opponent in view at " + o.x + ":" + o.y + "\r\n";
+				}				
+			}
+		}
 				
 		for(String s : analyzer.vars.keySet())
 		{

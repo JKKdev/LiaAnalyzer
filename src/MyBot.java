@@ -13,7 +13,7 @@ public class MyBot implements Bot {
     // game state. Use Api object to call actions on your units.
     // - GameState reference: https://docs.liagame.com/api/#gamestate
     // - Api reference:       https://docs.liagame.com/api/#api-object
-	static Analyzer analyzer;
+	public static Analyzer analyzer;
 		
     @Override
     public void update(GameState state, Api api) 
