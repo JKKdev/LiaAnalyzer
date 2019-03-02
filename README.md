@@ -27,8 +27,8 @@ Setup instructions:
 - add "static Analyzer analyzer;" as a global variable in MyBot
 
 Use case:
-	analyzer.push(VariableNameAsDisplayedInDebugger, Variable)
-	analyzer.push("Comment", "Enemy base reached!")
+- analyzer.push(VariableNameAsDisplayedInDebugger, Variable)
+- analyzer.push("Comment", "Enemy base reached!")
 	
 	If variable is parsable to text the value will be displayed in analyzer.
 
