@@ -7,7 +7,7 @@ A quick preview: https://streamable.com/k0yei
 
 Commands:
 - Left and Right Arrow to move one GameState forward/backward
--S pace to pause/play 
+- Space to pause/play 
 
 Setup instructions:
 - add "compile group: 'org.processing', name: 'core', version: '3.3.7'" to build.gradle dependencies
