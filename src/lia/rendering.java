@@ -41,6 +41,7 @@ public class rendering extends PApplet{
 	
 	public void setup(){
 		f=createFont("Arial",20,true);//we create the font
+		rendering.analyzer = Analyzer.analyzer;
 	}
 	
 	public void draw(){

@@ -11,11 +11,12 @@ public class Analyzer implements Runnable{
 
 	private Map<String,List<Object>> vars = new ConcurrentHashMap<String, List<Object>>();
 	int time = 0;
+	public static Analyzer analyzer;
 	
 	@Override
-	public void run() {
-		
-		rendering.analyzer = this;
+	public void run() 
+	{
+		Analyzer.analyzer = this;
 		while(true);
 		
 	}

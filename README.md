@@ -16,8 +16,7 @@ Setup instructions:
 - add Analyzer.java and rendering.java to lia package
 - add to top of MyBot main function:
 ```java
-analyzer = new Analyzer();
-Runnable r = analyzer;
+Runnable r = new Analyzer();
 Thread t = new Thread(r);
 t.start();
 
@@ -25,18 +24,14 @@ PApplet.main("lia.rendering");
 ```
 - add to top of MyBot update function:
 ```java
-analyzer.push("GameState", state);
+Analyzer.analyzer.push("GameState", state);
 if(!rendering.gameRunning)	rendering.gameRunning=true;
 ```
-- add "public static Analyzer analyzer;" as a global variable in MyBot
 
 Use case:
-- analyzer.push(VariableNameAsDisplayedInDebugger, Variable);
-- analyzer.push("Comment", "Enemy base reached!");
-- analyzer.push("Unit" + unit.id + ": ", "Resource Spotted");
-
-Within MyBot package from any other class:
-- MyBot.analyzer.push("Unit" + unit.id + ": ", "Resource Spotted");
+- Analyzer.analyzer.push(VariableNameAsDisplayedInDebugger, Variable);
+- Analyzer.analyzer.push("Comment", "Enemy base reached!");
+- Analyzer.analyzer.push("Unit" + unit.id + ": ", "Resource Spotted");
 	
 	If variable is parsable to text the value will be displayed in analyzer.
 

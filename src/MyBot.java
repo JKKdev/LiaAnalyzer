@@ -13,19 +13,17 @@ public class MyBot implements Bot {
     // This method is called 10 times per game second and holds current
     // game state. Use Api object to call actions on your units.
     // - GameState reference: https://docs.liagame.com/api/#gamestate
-    // - Api reference:       https://docs.liagame.com/api/#api-object
-	public static Analyzer analyzer;
-		
+    // - Api reference:       https://docs.liagame.com/api/#api-object		
     @Override
     public void update(GameState state, Api api) 
     {    	
-    	analyzer.push("GameState", state);
+    	Analyzer.analyzer.push("GameState", state);
     	if(!rendering.gameRunning)	rendering.gameRunning=true;
     	
     	// If you have enough resources to spawn a new warrior unit then spawn it.
         if (state.resources >= Constants.WARRIOR_PRICE) {
             api.spawnUnit(UnitType.WARRIOR);
-            analyzer.push("Comment", "Warrior Spawned");
+            Analyzer.analyzer.push("Comment", "Warrior Spawned");
         }
 
         // We iterate through all of our units that are still alive.
@@ -56,13 +54,13 @@ public class MyBot implements Bot {
             if (unit.type == UnitType.WORKER && unit.resourcesInView.length > 0) {
                 ResourceInView resource = unit.resourcesInView[0];
                 api.navigationStart(unit.id, resource.x, resource.y);
-                analyzer.push("Unit" + unit.id + ": ", "Resource Spotted");
+                Analyzer.analyzer.push("Unit" + unit.id + ": ", "Resource Spotted");
             }
 
             // If the unit is a warrior and it sees an opponent then start shooting
             if (unit.type == UnitType.WARRIOR && unit.opponentsInView.length > 0) {
                 api.shoot(unit.id);
-                analyzer.push("Unit" + unit.id + ": ", "Opponent Spotted");
+                Analyzer.analyzer.push("Unit" + unit.id + ": ", "Opponent Spotted");
                 api.saySomething(unit.id, "I see you!");
             }
         }
@@ -72,8 +70,7 @@ public class MyBot implements Bot {
     // Connects your bot to Lia game engine, don't change it.
     public static void main(String[] args) throws Exception {
     	
-    	analyzer = new Analyzer();
-    	Runnable r = analyzer;
+    	Runnable r = new Analyzer();
     	Thread t = new Thread(r);
     	t.start();
     	
