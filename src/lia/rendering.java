@@ -1,7 +1,6 @@
 package lia;
 import lia.api.GameState;
 import lia.api.OpponentInView;
-import lia.api.Point;
 import lia.api.ResourceInView;
 import lia.api.UnitData;
 import lia.api.UnitType;
@@ -21,7 +20,7 @@ public class rendering extends PApplet{
 	 * 	-set pixelSize to desired number
 	 */
 	
-	int pixelSize = 10; //Change to resize the window
+	int pixelSize = 5; //Change to resize the window
 	
 	//----------------------------------------------------//
 	
