@@ -77,7 +77,7 @@ public class NetworkingClient extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         System.out.println("Connection closed. Exiting...");
-        myBot.cleanup();
+        while(Thread.activeCount()>0);
         System.exit(0);
     }
 

@@ -19,6 +19,8 @@ public class MyBot implements Bot {
     public void update(GameState state, Api api) 
     {    	
     	analyzer.push("GameState", state);
+    	if(!rendering.gameRunning)	rendering.gameRunning=true;
+    	
     	// If you have enough resources to spawn a new warrior unit then spawn it.
         if (state.resources >= Constants.WARRIOR_PRICE) {
             api.spawnUnit(UnitType.WARRIOR);
@@ -72,13 +74,10 @@ public class MyBot implements Bot {
     	Runnable r = analyzer;
     	Thread t = new Thread(r);
     	t.start();
-        NetworkingClient.connectNew(args, new MyBot());       
+    	
+    	PApplet.main("lia.rendering");
+		
+		
+        NetworkingClient.connectNew(args, new MyBot());   
     }
-
-	@Override
-	public void cleanup() {
-		PApplet.main("lia.rendering");
-		if(!rendering.gameDone)	rendering.gameDone=true;
-		while(Thread.activeCount()>0);
-	}
 }

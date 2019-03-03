@@ -1,15 +1,15 @@
 package lia;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import lia.api.GameState;
 
 public class Analyzer implements Runnable{
 
-	public Map<String,List<Object>> vars = new HashMap<String, List<Object>>();
+	public Map<String,List<Object>> vars = new ConcurrentHashMap<String, List<Object>>();
 	int time = 0;
 	
 	@Override

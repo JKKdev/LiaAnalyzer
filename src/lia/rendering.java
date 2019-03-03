@@ -24,6 +24,8 @@ public class rendering extends PApplet{
 	
 	//----------------------------------------------------//
 	
+	boolean debugging = true;
+	
 	static Analyzer analyzer;
 	int time = 0;
 	int offset = 0;
@@ -33,7 +35,7 @@ public class rendering extends PApplet{
 	int mapWidth = 176, mapHeight = 99;
 	
 	int shift=pixelSize*mapWidth;//x coordinate of the end of the map
-	public static boolean gameDone=false;//if the game is not started we shouldn't render game data as it doesn't exist
+	public static boolean gameRunning=false;//if the game is not started we shouldn't render game data as it doesn't exist
 	static GameState state;//we need a pointer so we know what to draw. 
 	
 	String txt ="";
@@ -47,7 +49,7 @@ public class rendering extends PApplet{
 	}
 	
 	public void draw(){
-		if(!gameDone){//if the game is not started don't draw anything
+		if(!gameRunning){//if the game is not started don't draw anything
 			return;
 		}
 		formatOutput();
@@ -87,17 +89,25 @@ public class rendering extends PApplet{
 	{
 		long lastTime = 0;
 		
-		if(playVid && System.currentTimeMillis() - lastTime >= 100 && offset < analyzer.vars.get("GameState").size()-1)
+		if(!debugging)
 		{
-			offset++;
-			lastTime = System.currentTimeMillis();
+			if(playVid && System.currentTimeMillis() - lastTime >= 100 && offset < analyzer.vars.get("GameState").size()-1)
+			{
+				offset++;
+				lastTime = System.currentTimeMillis();
+			}
+			if(offset == analyzer.vars.get("GameState").size()-1)	playVid = !playVid;
+			
+			
+			state = (GameState)(analyzer.vars.get("GameState").get(0+offset));
+		}else{
+			state = (GameState)(analyzer.vars.get("GameState").get(analyzer.vars.get("GameState").size()-1));
 		}
-		if(offset == analyzer.vars.get("GameState").size()-1)	playVid = !playVid;
 		
 		
-		state = (GameState)(analyzer.vars.get("GameState").get(0+offset));
 		time = Math.round(state.time*10);
 		txt = "Frame: " + time + "\n\r";
+		txt += "Debug mode: " + debugging + "\n\r";
 		
 		for(UnitData u: state.units)
 		{
@@ -133,7 +143,7 @@ public class rendering extends PApplet{
 	{
 		if(key == CODED)
 		{
-			if(keyCode == LEFT)
+			if(keyCode == LEFT && !debugging)
 			{
 				int curr = analyzer.vars.get("GameState").indexOf(state);
 				
@@ -141,7 +151,7 @@ public class rendering extends PApplet{
 				else	offset--;
 			}
 			
-			if(keyCode == RIGHT)
+			if(keyCode == RIGHT && !debugging)
 			{
 				int curr = analyzer.vars.get("GameState").indexOf(state);
 				
@@ -149,9 +159,13 @@ public class rendering extends PApplet{
 				else	offset++;
 			}
 		}
-		if(key == ' ')
+		if(key == ' ' && !debugging)
 		{
 			playVid = !playVid;
+		}
+		if(key == 'd')
+		{
+			debugging = !debugging;
 		}
 	}
 }
