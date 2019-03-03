@@ -9,7 +9,7 @@ import lia.api.GameState;
 
 public class Analyzer implements Runnable{
 
-	public Map<String,List<Object>> vars = new ConcurrentHashMap<String, List<Object>>();
+	private Map<String,List<Object>> vars = new ConcurrentHashMap<String, List<Object>>();
 	int time = 0;
 	
 	@Override
@@ -18,6 +18,11 @@ public class Analyzer implements Runnable{
 		rendering.analyzer = this;
 		while(true);
 		
+	}
+	
+	public Map<String,List<Object>> getVariables()
+	{
+		return this.vars;
 	}
 	
 	public void push(String varName, Object var)
@@ -32,8 +37,6 @@ public class Analyzer implements Runnable{
 		{
 			if(!vars.containsKey(varName + (char)0 + time))	vars.put(varName + (char)0 + time, new ArrayList<Object>());
 			vars.get(varName + (char)0 + time).add(var);			
-		}		
-		//System.out.println("Name: " + varName + (char)0 + time + " Value: " + var);
-		
+		}	
 	}
 }

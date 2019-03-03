@@ -15,14 +15,9 @@ import processing.core.PFont;
  */
 public class rendering extends PApplet{
 		
-	/*	Setup instructions:
-	 * 	-add "compile group: 'org.processing', name: 'core', version: '3.3.7'" to build.gradle dependencies
-	 * 	-set pixelSize to desired number
-	 */
 	
-	int pixelSize = 5; //Change to resize the window
+	int pixelSize = 8; //Change to resize the window
 	
-	//----------------------------------------------------//
 	
 	boolean debugging = true;
 	
@@ -49,6 +44,9 @@ public class rendering extends PApplet{
 	}
 	
 	public void draw(){
+		scale(1,-1);
+		translate(0, -pixelSize*mapHeight);
+		
 		if(!gameRunning){//if the game is not started don't draw anything
 			return;
 		}
@@ -67,8 +65,8 @@ public class rendering extends PApplet{
 			fill(255,0,0);
 			ellipse(pixelSize*u.x,pixelSize*u.y,pixelSize*2,pixelSize*2);//make an ellipse for our unit
 			fill(0,0,0);
-			if(u.type == UnitType.WARRIOR)	text("Warr" + u.id,pixelSize*(u.x - 1), pixelSize*(u.y + 2));
-			else	text("Work" + u.id, pixelSize*(u.x - 1), pixelSize*(u.y + 2));
+			if(u.type == UnitType.WARRIOR)	rText("Warr" + u.id,pixelSize*(u.x - 1), pixelSize*(u.y - 2));
+			else	rText("Work" + u.id, pixelSize*(u.x - 1), pixelSize*(u.y - 2));
 			fill(0,0,255);
 			if(u.navigationPath.length > 0)
 			{
@@ -79,10 +77,20 @@ public class rendering extends PApplet{
 					if(i+1 < u.navigationPath.length)	line(pixelSize*u.navigationPath[i].x, pixelSize*u.navigationPath[i].y, pixelSize*u.navigationPath[i+1].x, pixelSize*u.navigationPath[i+1].y);
 				}
 			}
-			
 		}
+		
+		
 		fill(255,0,0);
-		text(txt,10,10);
+		rText(txt,10,pixelSize*mapHeight-10);
+	}
+	
+	void rText(String txt, float xPos, float yPos)
+	{
+		pushMatrix();
+		translate(0, pixelSize*mapHeight);
+		scale(1,-1);
+		text(txt,xPos,pixelSize*mapHeight - yPos);
+		popMatrix();
 	}
 	
 	public void formatOutput()
@@ -91,24 +99,24 @@ public class rendering extends PApplet{
 		
 		if(!debugging)
 		{
-			if(playVid && System.currentTimeMillis() - lastTime >= 100 && offset < analyzer.vars.get("GameState").size()-1)
+			if(playVid && System.currentTimeMillis() - lastTime >= 100 && offset < analyzer.getVariables().get("GameState").size()-1)
 			{
 				offset++;
 				lastTime = System.currentTimeMillis();
 			}
-			if(offset == analyzer.vars.get("GameState").size()-1)	playVid = !playVid;
+			if(offset == analyzer.getVariables().get("GameState").size()-1)	playVid = !playVid;
 			
 			
-			state = (GameState)(analyzer.vars.get("GameState").get(0+offset));
+			state = (GameState)(analyzer.getVariables().get("GameState").get(0+offset));
 		}else{
-			state = (GameState)(analyzer.vars.get("GameState").get(analyzer.vars.get("GameState").size()-1));
+			state = (GameState)(analyzer.getVariables().get("GameState").get(analyzer.getVariables().get("GameState").size()-1));
 		}
 		
 		
 		time = Math.round(state.time*10);
 		txt = "Frame: " + time + "\n\r";
 		txt += "Debug mode: " + debugging + "\n\r";
-		
+				
 		for(UnitData u: state.units)
 		{
 			if(u.resourcesInView.length > 0)
@@ -127,11 +135,11 @@ public class rendering extends PApplet{
 			}
 		}
 				
-		for(String s : analyzer.vars.keySet())
+		for(String s : analyzer.getVariables().keySet())
 		{
 			if(s.endsWith((char)0 + Integer.toString(time)))
 			{
-				for(Object o : analyzer.vars.get(s))
+				for(Object o : analyzer.getVariables().get(s))
 				{
 					txt += s.substring(0, s.indexOf((char)0)) + ": " + o + "\n\r";
 				}
@@ -143,19 +151,19 @@ public class rendering extends PApplet{
 	{
 		if(key == CODED)
 		{
-			if(keyCode == LEFT && !debugging)
+			if(keyCode == LEFT && !debugging && !playVid)
 			{
-				int curr = analyzer.vars.get("GameState").indexOf(state);
+				int curr = analyzer.getVariables().get("GameState").indexOf(state);
 				
-				if(curr < 1)	offset = analyzer.vars.get("GameState").size()-1;
+				if(curr < 1)	offset = analyzer.getVariables().get("GameState").size()-1;
 				else	offset--;
 			}
 			
-			if(keyCode == RIGHT && !debugging)
+			if(keyCode == RIGHT && !debugging && !playVid)
 			{
-				int curr = analyzer.vars.get("GameState").indexOf(state);
+				int curr = analyzer.getVariables().get("GameState").indexOf(state);
 				
-				if(curr > analyzer.vars.get("GameState").size()-2)	offset = 0;
+				if(curr > analyzer.getVariables().get("GameState").size()-2)	offset = 0;
 				else	offset++;
 			}
 		}

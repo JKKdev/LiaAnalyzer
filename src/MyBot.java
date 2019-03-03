@@ -1,5 +1,6 @@
 import lia.api.*;
 import processing.core.PApplet;
+
 import lia.*;
 
 /**
@@ -67,6 +68,7 @@ public class MyBot implements Bot {
         }
     }
     
+    
     // Connects your bot to Lia game engine, don't change it.
     public static void main(String[] args) throws Exception {
     	
@@ -75,9 +77,8 @@ public class MyBot implements Bot {
     	Thread t = new Thread(r);
     	t.start();
     	
-    	PApplet.main("lia.rendering");
-		
-		
-        NetworkingClient.connectNew(args, new MyBot());   
+    	PApplet.main("lia.rendering");		
+	    NetworkingClient.connectNew(args, new MyBot()); 
+  
     }
 }
