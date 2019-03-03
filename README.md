@@ -8,30 +8,27 @@ A quick preview: https://streamable.com/k0yei
 Commands:
 - Left and Right Arrow to move one GameState forward/backward
 - Space to pause/play 
+- D to lock/unlock connection to debugger (when unlocked you can move between GameStates with the above commands up to the GameState the debugger is at)
 
 Setup instructions:
 - add "compile group: 'org.processing', name: 'core', version: '3.3.7'" to build.gradle dependencies
-- add cleanup function to Bot interface
-- add a call to said funtion in NetworkingClient onClose funtion
+- add "while(Thread.activeCount()>0);" to NetworkingClient onClose function
 - add Analyzer.java and rendering.java to lia package
-- add to MyBot main function:
+- add to top of MyBot main function:
 ```java
 analyzer = new Analyzer();
 Runnable r = analyzer;
 Thread t = new Thread(r);
 t.start();
+
+PApplet.main("lia.rendering");
 ```
-- add to MyBot:
+- add to top of MyBot update function:
 ```java
-@Override
-public void cleanup() {
-	PApplet.main("lia.rendering");
-	if(!rendering.gameDone)	rendering.gameDone=true;
-	while(Thread.activeCount()>0);
-}
+analyzer.push("GameState", state);
+if(!rendering.gameRunning)	rendering.gameRunning=true;
 ```
 - add "public static Analyzer analyzer;" as a global variable in MyBot
-- add "analyzer.push("GameState", state);" to the top of MyBot update function
 
 Use case:
 - analyzer.push(VariableNameAsDisplayedInDebugger, Variable);
